@@ -22,12 +22,6 @@ const ICONS = {
       <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" />
     </svg>
   ),
-  tasks: (
-    <svg {...icon}>
-      <path d="M9 6h11M9 12h11M9 18h11" />
-      <path d="m3.5 6 1 1 2-2M3.5 12l1 1 2-2M3.5 18l1 1 2-2" />
-    </svg>
-  ),
   chain: (
     <svg {...icon}>
       <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
@@ -53,7 +47,6 @@ type NavItem =
 
 const ITEMS: NavItem[] = [
   { kind: "link", href: "/", label: "Hafta", icon: "home", match: (p) => p === "/" },
-  { kind: "link", href: "/gelen-kutusu", label: "Görevler", icon: "tasks", match: (p) => p.startsWith("/gelen-kutusu") },
   { kind: "link", href: "/zincir", label: "Zinciri Kırma", icon: "chain", match: (p) => p.startsWith("/zincir") },
   { kind: "link", href: "/istatistik", label: "İstatistik", icon: "stats", match: (p) => p.startsWith("/istatistik") },
   { kind: "action", label: "Görünüm ve yedek", icon: "settings", event: OPEN_APPEARANCE_MENU_EVENT },

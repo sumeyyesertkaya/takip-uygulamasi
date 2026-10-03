@@ -85,9 +85,6 @@ lib/
 - Hafta görünümü yatay kaydırılabilir: her gün en az 14 rem genişliğinde, geniş ekranda 7 gün sığar, dar ekranda kaydırılır (bugünün sütunu otomatik görünür alana gelir).
 - Animasyonlar kısa ve dikkat dağıtmayan.
 
-### Ek sayfa: Görevler (gelen kutusu) (`/gelen-kutusu`)
-- Tarihsiz görevlerin tam sayfa görünümü; haftalık görünümdeki sağ panel de duruyor.
-
 ### Ek özellik: Zinciri Kırma (`/zincir`)
 - Sabit günlük alışkanlıklar (`habits`, `habitLogs`; Dexie v2). Her gün işaretlenir, geçmiş günler de düzenlenebilir.
 - GitHub tarzı ısı haritası, dönem seçici (1 Ay / 3 Ay / 6 Ay / 1 Yıl), genel görünüm + zincir başına seri ve oran istatistikleri.

@@ -7,7 +7,6 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
   { href: "/", label: "Hafta", match: (path: string) => path === "/" },
-  { href: "/gelen-kutusu", label: "Görevler", match: (path: string) => path.startsWith("/gelen-kutusu") },
   { href: "/zincir", label: "Zinciri Kırma", match: (path: string) => path.startsWith("/zincir") },
   { href: "/istatistik", label: "İstatistik", match: (path: string) => path.startsWith("/istatistik") },
 ];

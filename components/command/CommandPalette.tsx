@@ -72,7 +72,9 @@ export function CommandPalette() {
               requestDate(task.date);
               if (pathname !== "/") router.push("/");
             } else {
-              router.push("/gelen-kutusu");
+              // Tarihsiz görevler ana sayfadaki Görevler kutusunda
+              if (pathname === "/") document.getElementById("inbox")?.scrollIntoView({ behavior: "smooth" });
+              else router.push("/#inbox");
             }
           },
         });
@@ -81,7 +83,6 @@ export function CommandPalette() {
 
     const pages: Command[] = [
       { id: "go-week", label: "Hafta", hint: "Sayfa", run: () => router.push("/") },
-      { id: "go-inbox", label: "Görevler", hint: "Sayfa", run: () => router.push("/gelen-kutusu") },
       { id: "go-chain", label: "Zinciri Kırma", hint: "Sayfa", run: () => router.push("/zincir") },
       { id: "go-stats", label: "İstatistik", hint: "Sayfa", run: () => router.push("/istatistik") },
       { id: "backup", label: "Yedeği indir", hint: "Veri", run: () => downloadBackup() },

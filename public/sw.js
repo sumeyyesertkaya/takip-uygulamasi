@@ -1,8 +1,8 @@
 // Little by Little service worker: uygulamayı çevrimdışı açılabilir yapar.
 // Sayfalar ağ-öncelikli (her zaman güncel), hash'li statik dosyalar önbellek-öncelikli.
 // Önbelleği sıfırlamak için CACHE adındaki sürümü artır.
-const CACHE = "lbl-v1";
-const PAGES = ["/", "/zincir", "/istatistik", "/gelen-kutusu"];
+const CACHE = "lbl-v2";
+const PAGES = ["/", "/zincir", "/istatistik"];
 const STATIC = ["/manifest.webmanifest", "/logo.png", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 async function precache() {
