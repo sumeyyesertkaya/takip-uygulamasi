@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { RegisterSW } from "@/components/pwa/RegisterSW";
+import { MobileNav } from "@/components/layout/MobileNav";
 import { AppearanceFab } from "@/components/appearance/AppearanceFab";
 import { CommandPalette } from "@/components/command/CommandPalette";
 import { UndoToast } from "@/components/ui/UndoToast";
@@ -17,6 +18,8 @@ const manrope = Manrope({
 });
 
 export const viewport: Viewport = {
+  // iPhone çentik/ana ekran çizgisi için güvenli alan değişkenleri
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ececec" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
@@ -40,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <ClimbWidget />
         <AppearanceFab />
+        <MobileNav />
         <UndoToast />
         <CommandPalette />
         <RegisterSW />

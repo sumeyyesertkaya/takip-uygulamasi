@@ -170,6 +170,78 @@ function DraggableFrame({ position, children }: { position: Point | null; childr
   );
 }
 
+// Mobilde alt gezinme çubuğunun hemen üstü (iPhone ana ekran çizgisi hesaba katılır)
+const MOBILE_BOTTOM = "bottom-[calc(env(safe-area-inset-bottom)+4.75rem)]";
+
+type ControlsProps = {
+  status: SessionStatus;
+  elapsed: number;
+  allDone: boolean;
+};
+
+/** Çalış / Mola / Bitti / Yeniden başla düğmeleri (masaüstü kartı ve mobil çubuk ortak). */
+function SessionControls({ status, elapsed, allDone }: ControlsProps) {
+  return (
+    <>
+      {status === "idle" && (
+        <button type="button" onClick={startWork} className={primaryBtn}>
+          {elapsed > 0 ? "Devam et" : "Çalış"}
+        </button>
+      )}
+      {status === "working" && (
+        <button type="button" onClick={takeBreak} className={ghostBtn}>
+          Mola
+        </button>
+      )}
+      {status === "break" && (
+        <button type="button" onClick={startWork} className={primaryBtn}>
+          Çalış
+        </button>
+      )}
+      {(status === "working" || status === "break") && (
+        <button
+          type="button"
+          onClick={finishSession}
+          disabled={!allDone}
+          title={allDone ? "Günü bitir" : "Önce bugünün tüm görevlerini tamamla"}
+          className={status === "working" ? `${primaryBtn} disabled:opacity-40` : ghostBtn}
+        >
+          Bitti
+        </button>
+      )}
+      {status === "finished" && (
+        <button type="button" onClick={restartScene} className={ghostBtn}>
+          Yeniden başla
+        </button>
+      )}
+    </>
+  );
+}
+
+function ResetButton() {
+  return (
+    <button
+      type="button"
+      onClick={resetTimer}
+      aria-label="Süreyi sıfırla"
+      title="Süreyi sıfırla (geri alınabilir)"
+      className="text-muted transition-colors hover:text-primary"
+    >
+      <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 8a5 5 0 1 0 1.6-3.7M3 2.5v2.8h2.8" />
+      </svg>
+    </button>
+  );
+}
+
+function MountainIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
+      <path d="M3 19 10 8l4 6 2-3 5 8Z" />
+    </svg>
+  );
+}
+
 export function ClimbWidget() {
   const now = useNowSecond();
   const session = useSession();
@@ -185,19 +257,32 @@ export function ClimbWidget() {
   // Sunucuda ve hydration sırasında çizilmez; zaman ve kayıtlı oturum yalnızca istemcide bilinir.
   if (!now) return null;
 
+  const { status } = session;
+  const canReset = elapsed > 0 || status !== "idle";
+
   // Küçültülünce düğme her zaman sol altta sabit durur (kartın sürüklendiği yerde kalmaz)
   if (session.collapsed) {
+    const collapsedButton =
+      "fixed z-40 h-9 w-9 items-center justify-center rounded-full border border-line bg-surface text-foreground shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-105";
     return (
-      <button
-        type="button"
-        onClick={() => setCollapsed(false)}
-        aria-label="Tırmanış sahnesini aç"
-        className="fixed bottom-4 left-4 z-40 hidden h-9 w-9 items-center justify-center rounded-full border border-line bg-surface text-foreground shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 md:flex"
-      >
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
-          <path d="M3 19 10 8l4 6 2-3 5 8Z" />
-        </svg>
-      </button>
+      <>
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          aria-label="Tırmanış sahnesini aç"
+          className={`${collapsedButton} bottom-4 left-4 hidden md:flex`}
+        >
+          <MountainIcon />
+        </button>
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          aria-label="Sayacı aç"
+          className={`${collapsedButton} ${MOBILE_BOTTOM} left-3 flex md:hidden`}
+        >
+          <MountainIcon />
+        </button>
+      </>
     );
   }
 
@@ -208,92 +293,79 @@ export function ClimbWidget() {
 
   const hour = new Date(now).getHours();
   const night = hour >= 21 || hour < 5;
-  const slow = session.status !== "finished" && total > 0 && hour >= 15 && ratio < 0.3;
-
-  const { status } = session;
+  const slow = status !== "finished" && total > 0 && hour >= 15 && ratio < 0.3;
+  const message = getMessage(status, ratio, total, night, slow);
 
   return (
-    <DraggableFrame position={session.position}>
-    <div className="relative w-44 overflow-hidden rounded-2xl border border-line bg-surface text-foreground shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]">
-      <button
-        type="button"
-        onClick={() => setCollapsed(true)}
-        aria-label="Küçült"
-        className="absolute right-1.5 top-1.5 z-10 text-muted transition-colors hover:text-primary"
-      >
-        <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="m4 4 8 8M12 4l-8 8" strokeLinecap="round" />
-        </svg>
-      </button>
+    <>
+      {/* Masaüstü: sürüklenebilir tırmanış kartı */}
+      <DraggableFrame position={session.position}>
+        <div className="relative w-44 overflow-hidden rounded-2xl border border-line bg-surface text-foreground shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]">
+          <button
+            type="button"
+            onClick={() => setCollapsed(true)}
+            aria-label="Küçült"
+            className="absolute right-1.5 top-1.5 z-10 text-muted transition-colors hover:text-primary"
+          >
+            <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="m4 4 8 8M12 4l-8 8" strokeLinecap="round" />
+            </svg>
+          </button>
 
-      <ClimbScene
-        progress={ratio}
-        walking={status === "working"}
-        resting={status === "break"}
-        summit={status === "finished"}
-        night={night && status !== "finished"}
-        rain={slow && status !== "break"}
-      />
+          <ClimbScene
+            progress={ratio}
+            walking={status === "working"}
+            resting={status === "break"}
+            summit={status === "finished"}
+            night={night && status !== "finished"}
+            rain={slow && status !== "break"}
+          />
 
-      <div className="flex flex-col gap-2 border-t border-line p-2.5">
-        <div className="flex flex-col gap-0.5">
-          <p className="text-[11px] font-medium leading-tight">{getMessage(status, ratio, total, night, slow)}</p>
-          <FlipClock elapsedMs={elapsed} />
+          <div className="flex flex-col gap-2 border-t border-line p-2.5">
+            <div className="flex flex-col gap-0.5">
+              <p className="text-[11px] font-medium leading-tight">{message}</p>
+              <FlipClock elapsedMs={elapsed} />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              <SessionControls status={status} elapsed={elapsed} allDone={allDone} />
+              <span className="ml-auto flex items-center gap-1.5">
+                {canReset && <ResetButton />}
+                <span className="text-[10px] text-muted">
+                  {done}/{total}
+                </span>
+              </span>
+            </div>
+          </div>
         </div>
+      </DraggableFrame>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          {status === "idle" && (
-            <button type="button" onClick={startWork} className={primaryBtn}>
-              {elapsed > 0 ? "Devam et" : "Çalış"}
-            </button>
-          )}
-          {status === "working" && (
-            <button type="button" onClick={takeBreak} className={ghostBtn}>
-              Mola
-            </button>
-          )}
-          {status === "break" && (
-            <button type="button" onClick={startWork} className={primaryBtn}>
-              Çalış
-            </button>
-          )}
-          {(status === "working" || status === "break") && (
-            <button
-              type="button"
-              onClick={finishSession}
-              disabled={!allDone}
-              title={allDone ? "Günü bitir" : "Önce bugünün tüm görevlerini tamamla"}
-              className={status === "working" ? `${primaryBtn} disabled:opacity-40` : ghostBtn}
-            >
-              Bitti
-            </button>
-          )}
-          {status === "finished" && (
-            <button type="button" onClick={restartScene} className={ghostBtn}>
-              Yeniden başla
-            </button>
-          )}
-          <span className="ml-auto flex items-center gap-1.5">
-            {(elapsed > 0 || status !== "idle") && (
-              <button
-                type="button"
-                onClick={resetTimer}
-                aria-label="Süreyi sıfırla"
-                title="Süreyi sıfırla (geri alınabilir)"
-                className="text-muted transition-colors hover:text-primary"
-              >
-                <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 8a5 5 0 1 0 1.6-3.7M3 2.5v2.8h2.8" />
-                </svg>
-              </button>
-            )}
-            <span className="text-[10px] text-muted">
-              {done}/{total}
-            </span>
-          </span>
+      {/* Mobil: alt gezinme çubuğunun üstünde ince sayaç çubuğu (sahne yer kaplamasın diye çizilmez) */}
+      <div
+        className={`fixed inset-x-3 ${MOBILE_BOTTOM} z-40 flex items-center gap-2.5 rounded-2xl border border-line bg-surface px-3 py-2 text-foreground shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)] md:hidden`}
+      >
+        <FlipClock elapsedMs={elapsed} />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[11px] font-medium leading-tight">{message}</p>
+          <p className="text-[10px] text-muted">
+            {done}/{total} görev
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-1.5">
+          <SessionControls status={status} elapsed={elapsed} allDone={allDone} />
+          {canReset && <ResetButton />}
+          <button
+            type="button"
+            onClick={() => setCollapsed(true)}
+            aria-label="Sayacı küçült"
+            className="p-1 text-muted transition-colors hover:text-primary"
+          >
+            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="m4 6 4 4 4-4" />
+            </svg>
+          </button>
         </div>
       </div>
-    </div>
-    </DraggableFrame>
+    </>
   );
 }

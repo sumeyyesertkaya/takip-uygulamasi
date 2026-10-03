@@ -135,7 +135,7 @@ export function CommandPalette() {
             if (e.key === "Enter") runCommand(commands[active]);
           }}
           placeholder="Görev ara, görev ekle ya da sayfaya git…"
-          className="w-full border-b border-line bg-transparent px-5 py-4 text-sm outline-none placeholder:text-muted"
+          className="w-full border-b border-line bg-transparent px-5 py-4 text-base outline-none md:text-sm placeholder:text-muted"
         />
         <ul className="max-h-80 overflow-y-auto p-2">
           {commands.map((command, i) => (

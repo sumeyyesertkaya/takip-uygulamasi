@@ -125,3 +125,9 @@ lib/
 ## Masaüstü / PWA
 
 - `output: "export"` ile statik çıktı (`out/`), `public/manifest.webmanifest`, `public/sw.js` (ağ-öncelikli sayfalar, önbellek-öncelikli statik dosyalar) ve `components/pwa/RegisterSW.tsx` (yalnızca üretimde kayıt). Yayın adımları README.md içinde.
+
+## Mobil görünüm (< 768 px)
+
+- Üstte yalnızca logo ve tema düğmesi; sekmeler ve görünüm/yedek menüsü altta yüzen, hap şeklinde ikon çubuğunda (`components/layout/MobileNav.tsx`).
+- Tırmanış kartı yerine ikon çubuğunun üstünde ince sayaç çubuğu (flip sayaç, mesaj, Çalış/Mola/Bitti); küçültülebilir.
+- Hafta: her gün ekranın ~%85'i genişliğinde, kaydırınca güne oturur. Üzerine gelince çıkan ikonlar dokunmatikte hep görünür; giriş alanları 16 px (iPhone yakınlaştırmasın). Alttaki öğeler `env(safe-area-inset-bottom)` hesaba katar.

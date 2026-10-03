@@ -38,7 +38,7 @@ export default function StatsPage() {
 
   return (
     <AppShell>
-      <main className="flex flex-col gap-8 p-6 sm:p-8">
+      <main className="flex flex-col gap-8 p-4 sm:p-8">
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">İstatistik</h1>

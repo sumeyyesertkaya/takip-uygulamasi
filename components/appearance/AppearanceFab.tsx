@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { OPEN_APPEARANCE_MENU_EVENT } from "@/components/layout/MobileNav";
 import { resetAppearance } from "@/lib/appearance";
 import { useBackgroundImage, useHasData } from "@/lib/db/hooks";
 import { clearBackgroundImage } from "@/lib/db/settings";
@@ -24,6 +25,13 @@ export function AppearanceFab() {
   const now = useNowSecond();
   const needsBackup = hasData && now > 0 && isBackupStale(lastBackupAt, now);
 
+  // Mobilde menü alttaki ikon çubuğunun ayarlar düğmesinden açılır
+  useEffect(() => {
+    const open = () => setMenuOpen(true);
+    window.addEventListener(OPEN_APPEARANCE_MENU_EVENT, open);
+    return () => window.removeEventListener(OPEN_APPEARANCE_MENU_EVENT, open);
+  }, []);
+
   function openPanel(next: Panel) {
     setPanel(next);
     setMenuOpen(false);
@@ -44,8 +52,17 @@ export function AppearanceFab() {
       {panel === "colors" && <ColorsPanel onClose={() => setPanel(null)} />}
       {panel === "backup" && <BackupPanel onClose={() => setPanel(null)} />}
 
+      {menuOpen && (
+        // Dokunmatikte dışarı dokununca menü kapansın
+        <button
+          type="button"
+          aria-label="Menüyü kapat"
+          className="fixed inset-0 z-40 cursor-default md:hidden"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
       <div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] right-3 z-50 md:bottom-6 md:right-6"
         onMouseEnter={() => setMenuOpen(true)}
         onMouseLeave={() => setMenuOpen(false)}
       >
@@ -78,7 +95,7 @@ export function AppearanceFab() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-label="Görünümü özelleştir"
           aria-expanded={menuOpen}
-          className="relative flex h-12 w-12 items-center justify-center rounded-full bg-primary text-on-primary shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] transition-transform hover:scale-105"
+          className="relative hidden h-12 w-12 items-center justify-center rounded-full bg-primary md:flex text-on-primary shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] transition-transform hover:scale-105"
         >
           <svg
             viewBox="0 0 16 16"

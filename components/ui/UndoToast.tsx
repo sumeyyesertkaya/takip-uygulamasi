@@ -10,7 +10,7 @@ export function UndoToast() {
     <div
       key={entry.id}
       role="status"
-      className="toast-in fixed bottom-6 left-1/2 z-[60] flex -translate-x-1/2 items-center gap-4 rounded-full bg-primary px-5 py-2.5 text-xs font-semibold text-on-primary shadow-[0_16px_40px_-12px_rgba(0,0,0,0.55)]"
+      className="toast-in fixed bottom-[calc(env(safe-area-inset-bottom)+8.5rem)] left-1/2 md:bottom-6 z-[60] flex -translate-x-1/2 items-center gap-4 rounded-full bg-primary px-5 py-2.5 text-xs font-semibold text-on-primary shadow-[0_16px_40px_-12px_rgba(0,0,0,0.55)]"
     >
       <span>{entry.message}</span>
       <button

@@ -26,7 +26,7 @@ export function TaskInput({ date, placeholder = "+ Görev ekle" }: TaskInputProp
         if (e.key === "Escape") setValue("");
       }}
       placeholder={placeholder}
-      className="w-full rounded-xl bg-transparent px-3 py-2 text-center text-xs placeholder:text-muted outline-none transition-colors hover:bg-surface/60 focus:bg-surface focus:text-left"
+      className="w-full rounded-xl bg-transparent px-3 py-2 text-center text-base md:text-xs placeholder:text-muted outline-none transition-colors hover:bg-surface/60 focus:bg-surface focus:text-left"
     />
   );
 }

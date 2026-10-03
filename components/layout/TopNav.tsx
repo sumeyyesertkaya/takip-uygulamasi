@@ -16,14 +16,14 @@ export function TopNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-8 border-b border-line px-6 py-3 sm:px-8">
+    <nav className="flex items-center gap-8 border-b border-line px-4 py-3 sm:px-8">
       <div className="flex items-center gap-2">
         <Image src="/logo.png" alt="Little by Little" width={34} height={33} priority />
-        <span className="hidden text-xs font-extrabold tracking-wider text-primary sm:inline">
+        <span className="text-xs font-extrabold tracking-wider text-primary">
           LITTLE BY LITTLE
         </span>
       </div>
-      <div className="flex gap-5 sm:gap-6">
+      <div className="hidden gap-6 md:flex">
         {links.map((link) => (
           <Link
             key={link.href}

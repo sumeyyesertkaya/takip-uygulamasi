@@ -12,7 +12,7 @@ export default function InboxPage() {
   return (
     <DndBoard containers={{ [INBOX_ID]: tasks }}>
       <AppShell>
-        <main className="flex flex-col gap-6 p-6 sm:p-8">
+        <main className="flex flex-col gap-6 p-4 sm:p-8">
           <header>
             <h1 className="text-2xl font-semibold tracking-tight">Görevler</h1>
             <p className="mt-1 text-xs text-muted">

@@ -15,7 +15,7 @@ export function DayColumn({ dateKey, isToday, tasks }: DayColumnProps) {
   return (
     <section
       className={`flex min-w-0 flex-col gap-3 rounded-3xl bg-card p-3 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.15)] ${
-        isToday ? "ring-1 ring-primary/50" : ""
+        isToday ? "ring-1 ring-inset ring-primary/50" : ""
       }`}
     >
       <header className={`flex flex-col items-center gap-1 pb-1 pt-1.5 text-center ${dim ? "opacity-60" : ""}`}>

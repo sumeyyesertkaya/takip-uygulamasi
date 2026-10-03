@@ -32,7 +32,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 const iconButton =
-  "text-muted opacity-0 transition-opacity hover:text-primary focus:opacity-100 group-hover:opacity-100";
+  "text-muted opacity-0 transition-opacity hover:text-primary focus:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100";
 
 export function HabitCard({ habit, days, startKey, today }: HabitCardProps) {
   const [editing, setEditing] = useState(false);

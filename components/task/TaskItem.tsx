@@ -81,7 +81,7 @@ export function TaskItem({ task, surface }: { task: Task; surface?: boolean }) {
               setEditing(false);
             }
           }}
-          className="min-w-0 flex-1 bg-transparent text-xs font-medium outline-none"
+          className="min-w-0 flex-1 bg-transparent text-base font-medium outline-none md:text-xs"
         />
       ) : (
         <span
@@ -100,7 +100,7 @@ export function TaskItem({ task, surface }: { task: Task; surface?: boolean }) {
           onClick={() => moveTaskToToday(task.id)}
           aria-label="Bugüne taşı"
           title="Bugüne taşı"
-          className="text-muted opacity-0 transition-opacity hover:text-primary focus:opacity-100 group-hover:opacity-100"
+          className="text-muted opacity-0 transition-opacity hover:text-primary focus:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
         >
           <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M3 8h10m-4-4 4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
@@ -111,7 +111,7 @@ export function TaskItem({ task, surface }: { task: Task; surface?: boolean }) {
         type="button"
         onClick={() => deleteTaskWithUndo(task)}
         aria-label="Görevi sil"
-        className="text-muted opacity-0 transition-opacity hover:text-primary focus:opacity-100 group-hover:opacity-100"
+        className="text-muted opacity-0 transition-opacity hover:text-primary focus:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
       >
         <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8">
           <path d="m4 4 8 8M12 4l-8 8" strokeLinecap="round" />

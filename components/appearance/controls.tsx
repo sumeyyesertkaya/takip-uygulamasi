@@ -10,7 +10,7 @@ export function PanelShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="fixed bottom-24 right-6 z-50 max-h-[75vh] w-80 max-w-[calc(100vw-3rem)] overflow-y-auto rounded-3xl border border-line bg-surface p-5 text-foreground shadow-[0_20px_60px_-20px_rgba(0,0,0,0.5)]">
+    <div className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] z-50 max-h-[70vh] overflow-y-auto md:inset-x-auto md:bottom-24 md:right-6 md:max-h-[75vh] md:w-80 rounded-3xl border border-line bg-surface p-5 text-foreground shadow-[0_20px_60px_-20px_rgba(0,0,0,0.5)]">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-semibold">{title}</h2>
         <button

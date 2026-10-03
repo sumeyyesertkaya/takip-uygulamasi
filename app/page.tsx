@@ -43,7 +43,7 @@ export default function Home() {
     <DndBoard containers={containers}>
       <AppShell>
         <div className="flex flex-col">
-          <main className="flex min-w-0 flex-1 flex-col gap-8 p-6 sm:p-8">
+          <main className="flex min-w-0 flex-1 flex-col gap-8 p-4 sm:p-8">
             <header id="week" className="flex flex-wrap items-center justify-between gap-4">
               <h1 className="text-2xl font-semibold tracking-tight">Haftanı planla</h1>
               <WeekNavigator
@@ -55,7 +55,7 @@ export default function Home() {
             </header>
             <WeekView dayKeys={dayKeys} tasksByDate={tasksByDate} />
           </main>
-          <aside className="grid gap-4 px-6 pb-6 sm:px-8 sm:pb-8 md:grid-cols-2">
+          <aside className="grid gap-4 px-4 pb-4 sm:px-8 sm:pb-8 md:grid-cols-2">
             <ProgressPanel dayKeys={dayKeys} tasksByDate={tasksByDate} />
             <InboxPanel tasks={inboxTasks} />
           </aside>

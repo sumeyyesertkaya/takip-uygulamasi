@@ -22,9 +22,9 @@ export function WeekView({ dayKeys, tasksByDate }: WeekViewProps) {
   }, [weekKey]);
 
   return (
-    <div ref={scrollRef} className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-3">
+    <div ref={scrollRef} className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-1 px-1 pb-3 pt-1 md:snap-none">
       {dayKeys.map((key) => (
-        <div key={key} className="flex min-w-56 flex-1 basis-56 flex-col" data-today={key === today}>
+        <div key={key} className="flex min-w-[85%] flex-1 basis-[85%] snap-center flex-col md:min-w-56 md:basis-56" data-today={key === today}>
           <DayColumn dateKey={key} isToday={key === today} tasks={tasksByDate[key] ?? []} />
         </div>
       ))}
