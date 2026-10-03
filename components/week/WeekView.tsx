@@ -1,0 +1,33 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import type { Task } from "@/lib/db";
+import { todayKey } from "@/lib/dates";
+import { DayColumn } from "./DayColumn";
+
+type WeekViewProps = {
+  dayKeys: string[];
+  tasksByDate: Record<string, Task[]>;
+};
+
+export function WeekView({ dayKeys, tasksByDate }: WeekViewProps) {
+  const today = todayKey();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const weekKey = dayKeys[0];
+
+  // Dar ekranda bugünün sütunu görünür alana gelsin (yalnızca yatayda kaydırır)
+  useEffect(() => {
+    const todayEl = scrollRef.current?.querySelector<HTMLElement>("[data-today='true']");
+    todayEl?.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [weekKey]);
+
+  return (
+    <div ref={scrollRef} className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-3">
+      {dayKeys.map((key) => (
+        <div key={key} className="flex min-w-56 flex-1 basis-56 flex-col" data-today={key === today}>
+          <DayColumn dateKey={key} isToday={key === today} tasks={tasksByDate[key] ?? []} />
+        </div>
+      ))}
+    </div>
+  );
+}
